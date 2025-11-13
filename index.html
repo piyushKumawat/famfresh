@@ -3,39 +3,108 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sushi Platter Builder</title>
+
 <style>
     body {
         font-family: Arial, sans-serif;
-        padding: 15px;
-        background: #fafafa;
-        max-width: 500px;
-        margin: auto;
+        background: #f3f3f3;
+        margin: 0;
+        padding: 0;
     }
+
+    /* Layout grid */
+    .container {
+        display: flex;
+        flex-direction: row;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    /* Stack on small screens */
+    @media(max-width: 768px) {
+        .container {
+            flex-direction: column;
+        }
+    }
+
+    /* Left section */
+    .left-panel {
+        flex: 1;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 6px #bbb;
+    }
+
+    /* Right cart */
+    .right-panel {
+        width: 330px;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 6px #bbb;
+    }
+
     h2 { text-align: center; }
+    h3 { margin-top: 20px; }
+
     select, input {
         width: 100%;
-        padding: 10px;
-        margin: 8px 0;
-        font-size: 16px;
+        padding: 8px;
+        font-size: 15px;
+        margin-top: 6px;
     }
+
     button {
         width: 100%;
-        padding: 12px;
+        padding: 10px;
         background: #ff5722;
         border: none;
         color: white;
-        font-size: 18px;
+        font-size: 16px;
+        border-radius: 6px;
         margin-top: 8px;
-        border-radius: 5px;
     }
+
     button:hover { opacity: 0.9; }
-    .item-box {
-        background: white;
-        padding: 12px;
-        margin-top: 12px;
-        border-radius: 5px;
-        box-shadow: 0 0 5px #ddd;
+
+    /* Cart */
+    .cart-item {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
     }
+
+    .cart-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+    }
+
+    .qty-btn {
+        background: #1976d2;
+        padding: 4px 9px;
+        font-size: 16px;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        margin: 0 5px;
+        width: 32px;
+    }
+
+    .remove-btn {
+        background: #b71c1c;
+    }
+
+    /* Compact edit box */
+    .edit-box {
+        background: #f7f7f7;
+        padding: 10px;
+        border-radius: 6px;
+        margin-top: 10px;
+        box-shadow: inset 0 0 4px #ddd;
+    }
+
 </style>
 </head>
 
@@ -43,32 +112,51 @@
 
 <h2>🍣 Sushi Platter Builder</h2>
 
-<h3>Add Rolls (10 pcs)</h3>
-<select id="rollSelect"></select>
-<input type="number" id="rollQty" value="1" min="1">
-<button onclick="addRoll()">Add Roll</button>
+<div class="container">
 
-<h3>Add Nigiri (1 pc)</h3>
-<select id="nigiriSelect"></select>
-<input type="number" id="nigiriQty" value="1" min="1">
-<button onclick="addNigiri()">Add Nigiri</button>
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
 
-<h3>Edit Item Cost</h3>
-<select id="editItem"></select>
-<input type="number" id="editCost" placeholder="Enter new cost">
-<button onclick="updateCost()">Update Cost</button>
+        <h3>Add Rolls (10 pcs)</h3>
+        <select id="rollSelect"></select>
+        <input type="number" id="rollQty" value="1" min="1">
+        <button onclick="addRoll()">Add Roll</button>
 
-<h3>Tax %</h3>
-<input type="number" id="taxRate" value="8" step="0.1">
+        <h3>Add Nigiri (1 pc)</h3>
+        <select id="nigiriSelect"></select>
+        <input type="number" id="nigiriQty" value="1" min="1">
+        <button onclick="addNigiri()">Add Nigiri</button>
 
-<div id="output" class="item-box"></div>
+        <div class="edit-box">
+            <h4>Edit Sushi Cost</h4>
+            <select id="editItem"></select>
+            <input type="number" id="editCost" placeholder="New cost">
+            <button onclick="updateCost()" style="background:#444;">Update</button>
+        </div>
 
-<button onclick="clearAll()" style="background:#444;">Clear</button>
+        <h3>Tax %</h3>
+        <input type="number" id="taxRate" value="8" step="0.1">
+    </div>
+
+
+
+
+    <!-- RIGHT PANEL: CART -->
+    <div class="right-panel">
+        <h3>Your Cart</h3>
+        <div id="cart"></div>
+
+        <hr>
+        <div id="summary"></div>
+
+        <button onclick="clearAll()" style="background:#555;">Clear Cart</button>
+    </div>
+
+</div>
 
 <script>
-// ------------------------------
-// Default Data
-// ------------------------------
+/* ---------- Default Prices ---------- */
+
 let rollPrices = {
     "Vegetable Roll": 6.00,
     "California Roll": 7.00,
@@ -85,13 +173,11 @@ let nigiriPrices = {
     "Yellowtail Nigiri": 2.40
 };
 
-let selectedItems = {};
+let cart = {};
 const STORE_CUT = 0.25;
 const OWNER_CUT = 0.32;
 
-// ------------------------------
-// Populate dropdowns
-// ------------------------------
+/* ---------- Load Dropdowns ---------- */
 function loadOptions() {
     let rollSel = document.getElementById("rollSelect");
     let nigiriSel = document.getElementById("nigiriSelect");
@@ -112,59 +198,46 @@ function loadOptions() {
 }
 loadOptions();
 
-// ------------------------------
-// Add Rolls
-// ------------------------------
+/* ---------- Add Items ---------- */
 function addRoll() {
     let item = document.getElementById("rollSelect").value;
     let qty = parseInt(document.getElementById("rollQty").value);
-
-    selectedItems[item] = (selectedItems[item] || 0) + qty;
-    updateOutput();
+    cart[item] = (cart[item] || 0) + qty;
+    updateCart();
 }
 
-// ------------------------------
-// Add Nigiri
-// ------------------------------
 function addNigiri() {
     let item = document.getElementById("nigiriSelect").value;
     let qty = parseInt(document.getElementById("nigiriQty").value);
-
-    selectedItems[item] = (selectedItems[item] || 0) + qty;
-    updateOutput();
+    cart[item] = (cart[item] || 0) + qty;
+    updateCart();
 }
 
-// ------------------------------
-// Update Cost
-// ------------------------------
+/* ---------- Update Cost ---------- */
 function updateCost() {
     let item = document.getElementById("editItem").value;
     let newCost = parseFloat(document.getElementById("editCost").value);
-
     if (isNaN(newCost)) {
         alert("Enter valid number");
         return;
     }
 
     if (rollPrices[item] !== undefined) rollPrices[item] = newCost;
-    if (nigiriPrices[item] !== undefined) nigiriPrices[item] = newCost;
+    else nigiriPrices[item] = newCost;
 
-    alert(`Updated ${item} cost to $${newCost.toFixed(2)}`);
-    updateOutput();
+    alert(`Updated ${item} to $${newCost.toFixed(2)}`);
+    updateCart();
 }
 
-// ------------------------------
-// Calculate & Display Output
-// ------------------------------
-function updateOutput() {
-    let out = document.getElementById("output");
-    out.innerHTML = "";
-
+/* ---------- Update Cart UI ---------- */
+function updateCart() {
+    let cartDiv = document.getElementById("cart");
+    cartDiv.innerHTML = "";
     let subtotal = 0;
     let pieces = 0;
 
-    for (let item in selectedItems) {
-        let qty = selectedItems[item];
+    for (let item in cart) {
+        let qty = cart[item];
         let price = 0;
         let pcs = 0;
 
@@ -173,39 +246,55 @@ function updateOutput() {
             pcs = qty * 10;
         } else {
             price = nigiriPrices[item] * qty;
-            pcs = qty * 1;
+            pcs = qty;
         }
 
         subtotal += price;
         pieces += pcs;
 
-        out.innerHTML += `${item} — Qty: ${qty} — $${price.toFixed(2)} — ${pcs} pcs<br>`;
+        cartDiv.innerHTML += `
+            <div class="cart-item">
+                <b>${item}</b><br>
+                <div class="cart-row">
+                    <div>
+                        <button class="qty-btn" onclick="changeQty('${item}', -1)">-</button>
+                        ${qty}
+                        <button class="qty-btn" onclick="changeQty('${item}', 1)">+</button>
+                    </div>
+                    <span>$${price.toFixed(2)}</span>
+                </div>
+            </div>
+        `;
     }
 
-    let taxRate = parseFloat(document.getElementById("taxRate").value) / 100;
-    let tax = subtotal * taxRate;
+    let tax = subtotal * (parseFloat(document.getElementById("taxRate").value) / 100);
     let total = subtotal + tax;
+    let store = total * STORE_CUT;
+    let owner = total * OWNER_CUT;
+    let profit = total - store - owner;
 
-    let storeShare = total * STORE_CUT;
-    let ownerShare = total * OWNER_CUT;
-    let yourProfit = total - storeShare - ownerShare;
-
-    out.innerHTML += `<hr>`;
-    out.innerHTML += `<b>Subtotal:</b> $${subtotal.toFixed(2)}<br>`;
-    out.innerHTML += `<b>Tax:</b> $${tax.toFixed(2)}<br>`;
-    out.innerHTML += `<b>Total:</b> $${total.toFixed(2)}<br><br>`;
-
-    out.innerHTML += `<b>Store (25%):</b> $${storeShare.toFixed(2)}<br>`;
-    out.innerHTML += `<b>Owner (32%):</b> $${ownerShare.toFixed(2)}<br><br>`;
-
-    out.innerHTML += `<b style="font-size:20px;color:#d32f2f">Your Profit: $${yourProfit.toFixed(2)}</b><br>`;
-    out.innerHTML += `<b>Total Pieces: ${pieces}</b>`;
+    document.getElementById("summary").innerHTML = `
+        <b>Subtotal:</b> $${subtotal.toFixed(2)}<br>
+        <b>Tax:</b> $${tax.toFixed(2)}<br>
+        <b>Total:</b> $${total.toFixed(2)}<br><br>
+        <b>Store (25%):</b> $${store.toFixed(2)}<br>
+        <b>Owner (32%):</b> $${owner.toFixed(2)}<br><br>
+        <b style="font-size:18px;color:#d32f2f;">Your Profit: $${profit.toFixed(2)}</b><br>
+        <b>Total Pieces: ${pieces}</b>
+    `;
 }
 
-// ------------------------------
+/* ---------- Change Cart Quantity ---------- */
+function changeQty(item, val) {
+    cart[item] += val;
+    if (cart[item] <= 0) delete cart[item];
+    updateCart();
+}
+
+/* ---------- Clear Cart ---------- */
 function clearAll() {
-    selectedItems = {};
-    updateOutput();
+    cart = {};
+    updateCart();
 }
 </script>
 

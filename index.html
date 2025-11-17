@@ -1,557 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Sushi Platter Builder</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    :root {
-        --bg: #f3f3f3;
-        --card-bg: #ffffff;
-        --text: #222;
-        --muted: #666;
-        --accent: #ff5722;
-        --accent-alt: #1976d2;
-        --danger: #b71c1c;
-        --shadow: 0 0 6px rgba(0,0,0,0.15);
-    }
-    body.dark {
-        --bg: #15151a;
-        --card-bg: #22232b;
-        --text: #f5f5f5;
-        --muted: #bbbbbb;
-        --accent: #ff9800;
-        --accent-alt: #90caf9;
-        --danger: #ef5350;
-        --shadow: 0 0 8px rgba(0,0,0,0.6);
-    }
+  :root {
+    --bg: #f5f5f7;
+    --card-bg: #ffffff;
+    --text: #222;
+    --muted: #666;
+    --accent: #ff7043;
+    --accent-alt: #1976d2;
+    --danger: #c62828;
+    --shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  body.dark {
+    --bg: #101018;
+    --card-bg: #1d1f27;
+    --text: #f5f5f5;
+    --muted: #9fa3b5;
+    --accent: #ffa726;
+    --accent-alt: #64b5f6;
+    --danger: #ef5350;
+    --shadow: 0 2px 18px rgba(0,0,0,0.7);
+  }
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-    }
+  * { box-sizing: border-box; }
 
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 16px;
-        background: #000;
-        color: #fff;
-    }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
 
-    header h1 {
-        font-size: 20px;
-        margin: 0;
-    }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #000;
+    color: #fff;
+  }
 
-    .header-right {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-    }
+  header h1 {
+    font-size: 18px;
+    margin: 0;
+  }
 
-    .btn {
-        border: none;
-        border-radius: 20px;
-        padding: 6px 14px;
-        font-size: 13px;
-        cursor: pointer;
-        background: var(--accent);
-        color: #fff;
-        white-space: nowrap;
-    }
+  .header-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
 
-    .btn-secondary {
-        background: #444;
-    }
+  .btn {
+    border: none;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    white-space: nowrap;
+  }
 
-    .btn-outline {
-        background: transparent;
-        border: 1px solid #666;
-        color: #fff;
-    }
+  .btn-secondary {
+    background: #444;
+  }
 
-    .container {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        padding: 10px;
-    }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid #666;
+    color: #fff;
+  }
 
-    @media(max-width: 900px) {
-        .container {
-            flex-direction: column;
-        }
-    }
+  .main {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+  }
 
-    .left-panel {
-        flex: 1.5;
-        background: var(--card-bg);
-        border-radius: 10px;
-        padding: 12px;
-        box-shadow: var(--shadow);
-        min-width: 0;
+  @media (max-width: 900px) {
+    .main {
+      flex-direction: column;
     }
+  }
 
-    .right-panel {
-        flex: 1;
-        max-width: 380px;
-        background: var(--card-bg);
-        border-radius: 10px;
-        padding: 12px;
-        box-shadow: var(--shadow);
-    }
+  .panel {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+  }
 
-    h2, h3, h4 {
-        margin-top: 0;
-    }
+  .left-panel {
+    flex: 1.7;
+    min-width: 0;
+  }
 
-    .filters {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 10px;
-    }
+  .right-panel {
+    flex: 1;
+    max-width: 380px;
+  }
 
-    .chip {
-        border-radius: 16px;
-        padding: 4px 10px;
-        font-size: 12px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        background: #f5f5f5;
-        color: #333;
-    }
-    body.dark .chip {
-        background: #333;
-        color: #eee;
-        border-color: #555;
-    }
-    .chip.active {
-        background: var(--accent-alt);
-        border-color: var(--accent-alt);
-        color: #fff;
-    }
+  h2, h3, h4 {
+    margin-top: 0;
+  }
 
-    input[type="text"], input[type="number"], select {
-        width: 100%;
-        padding: 7px 8px;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid #bbb;
-        box-sizing: border-box;
-        margin: 4px 0 8px 0;
-        background: transparent;
-        color: var(--text);
-    }
-    body.dark input, body.dark select {
-        border-color: #555;
-    }
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 7px 9px;
+    margin: 4px 0 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text);
+  }
 
-    .menu-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-        gap: 10px;
-    }
+  body.dark input,
+  body.dark select {
+    border-color: #555;
+  }
 
-    .card {
-        background: var(--card-bg);
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: var(--shadow);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
 
-    .card-title {
-        font-size: 15px;
-        font-weight: bold;
-        margin-bottom: 4px;
-    }
+  .chip {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    cursor: pointer;
+    background: #f4f4f4;
+    color: #333;
+  }
+  body.dark .chip {
+    background: #333;
+    color: #eee;
+    border-color: #555;
+  }
+  .chip.active {
+    background: var(--accent-alt);
+    color: #fff;
+    border-color: var(--accent-alt);
+  }
 
-    .price-line {
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+  }
 
-    .meta {
-        font-size: 12px;
-        color: var(--muted);
-        margin-bottom: 4px;
-    }
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-    .tags {
-        font-size: 13px;
-        margin-bottom: 4px;
-    }
+  .card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: #ddd;
+  }
 
-    .qty-row {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        margin-top: 4px;
-    }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
 
-    .qty-row input {
-        width: 60px;
-    }
+  .meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
 
-    .mini-note {
-        font-size: 11px;
-        color: var(--muted);
-    }
+  .tags {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
 
-    .cart-item {
-        padding: 8px 0;
-        border-bottom: 1px solid #ddd;
-    }
-    body.dark .cart-item {
-        border-color: #444;
-    }
+  .qty-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 6px;
+  }
 
-    .cart-header {
-        font-weight: bold;
-        margin-bottom: 6px;
-    }
+  .qty-row input {
+    width: 60px;
+    text-align: center;
+  }
 
-    .cart-row-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-    }
+  .edit-box {
+    margin-top: 14px;
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.03);
+    font-size: 12px;
+  }
+  body.dark .edit-box {
+    background: rgba(255,255,255,0.05);
+  }
 
-    .cart-row-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 12px;
-        margin-top: 2px;
-        color: var(--muted);
-    }
+  .edit-box h4 {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+  }
 
-    .qty-btn {
-        background: var(--accent-alt);
-        border: none;
-        border-radius: 4px;
-        width: 26px;
-        height: 26px;
-        color: #fff;
-        font-size: 16px;
-        cursor: pointer;
-    }
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 10px 0;
+  }
 
-    .remove-btn {
-        background: var(--danger);
-        border-radius: 4px;
-        padding: 4px 8px;
-        font-size: 11px;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        margin-left: 8px;
-    }
+  .preset-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    background: #eee;
+    color: #333;
+  }
+  body.dark .preset-btn {
+    background: #333;
+    color: #eee;
+  }
+  .preset-btn:hover {
+    background: var(--accent-alt);
+    color: #fff;
+  }
 
-    .summary {
-        font-size: 13px;
-        margin-top: 8px;
-        border-top: 1px solid #ddd;
-        padding-top: 8px;
-    }
-    body.dark .summary {
-        border-color: #444;
-    }
+  .cart-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  body.dark .cart-item {
+    border-color: #444;
+  }
 
-    .summary b {
-        display: inline-block;
-        min-width: 110px;
-    }
+  .cart-row-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
 
-    .edit-box {
-        margin-top: 10px;
-        padding: 8px;
-        border-radius: 8px;
-        background: rgba(0,0,0,0.03);
-        font-size: 12px;
-    }
-    body.dark .edit-box {
-        background: rgba(255,255,255,0.04);
-    }
+  .cart-row-bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    align-items: center;
+  }
 
-    .edit-box h4 {
-        margin: 0 0 4px 0;
-        font-size: 13px;
-    }
+  .qty-btn {
+    background: var(--accent-alt);
+    border: none;
+    border-radius: 4px;
+    width: 26px;
+    height: 26px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
 
-    .preset-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin: 6px 0 10px 0;
-    }
+  .remove-btn {
+    background: var(--danger);
+    border: none;
+    border-radius: 4px;
+    padding: 3px 7px;
+    font-size: 11px;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 6px;
+  }
 
-    .preset-btn {
-        border: none;
-        border-radius: 18px;
-        padding: 5px 10px;
-        font-size: 12px;
-        cursor: pointer;
-        background: #eee;
-        color: #333;
-    }
-    body.dark .preset-btn {
-        background: #333;
-        color: #eee;
-    }
+  .summary {
+    font-size: 13px;
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+  }
+  body.dark .summary {
+    border-color: #444;
+  }
 
-    .preset-btn:hover {
-        background: var(--accent-alt);
-        color: #fff;
-    }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+  }
 
-    small {
-        font-size: 11px;
-        color: var(--muted);
-    }
+  .summary-row b {
+    font-weight: 600;
+  }
+
+  .hint {
+    font-size: 11px;
+    color: var(--muted);
+  }
 </style>
 </head>
 <body>
 
 <header>
-    <h1>🍣 Sushi Platter Builder</h1>
-    <div class="header-right">
-        <button class="btn-secondary btn-outline" onclick="toggleDarkMode()">🌙</button>
-        <button class="btn-secondary" onclick="window.print()">Print / Save PDF</button>
-    </div>
+  <h1>🍣 Sushi Platter Builder</h1>
+  <div class="header-right">
+    <button class="btn btn-outline" onclick="toggleDarkMode()">🌙</button>
+    <button class="btn btn-secondary" onclick="window.print()">Print / Save PDF</button>
+  </div>
 </header>
 
-<div class="container">
-    <!-- LEFT PANEL: MENU -->
-    <div class="left-panel">
-        <h3>Menu & Platter Builder</h3>
+<div class="main">
+  <!-- LEFT: MENU -->
+  <div class="panel left-panel">
+    <h2>Menu</h2>
 
-        <!-- Search -->
-        <input type="text" id="searchInput" placeholder="Search by name, filling, sauce..." oninput="renderMenu()" />
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search by name, filling, sauce..."
+      oninput="renderMenu()"
+    />
 
-        <!-- Filters -->
-        <div class="filters">
-            <span class="chip active" data-filter="all" onclick="toggleFilter('all')">All</span>
-            <span class="chip" data-filter="roll" onclick="toggleFilter('roll')">Rolls</span>
-            <span class="chip" data-filter="nigiri" onclick="toggleFilter('nigiri')">Nigiri</span>
-            <span class="chip" data-filter="veg" onclick="toggleFilter('veg')">Veg</span>
-            <span class="chip" data-filter="spicy" onclick="toggleFilter('spicy')">Spicy</span>
-            <span class="chip" data-filter="raw" onclick="toggleFilter('raw')">Raw</span>
-            <span class="chip" data-filter="cooked" onclick="toggleFilter('cooked')">Cooked</span>
-        </div>
-
-        <!-- Preset Platters -->
-        <div class="preset-row">
-            <button class="preset-btn" onclick="buildPlatter('veg')">Veggie Platter</button>
-            <button class="preset-btn" onclick="buildPlatter('mixed')">Mixed Platter</button>
-            <button class="preset-btn" onclick="buildPlatter('nigiri')">Nigiri Platter</button>
-        </div>
-        <small>Platters auto-pick items from your menu (you can adjust quantities in the cart).</small>
-
-        <!-- Menu grid -->
-        <h4 style="margin-top:12px;">Sushi Menu (from Google Sheet)</h4>
-        <div id="menuGrid" class="menu-grid">
-            <!-- Cards injected here -->
-        </div>
-
-        <!-- Price edit (small box) -->
-        <div class="edit-box">
-            <h4>Quick Price Edit (in app only)</h4>
-            <select id="editItemSelect"></select>
-            <input type="number" id="editPriceInput" placeholder="New price" step="0.1" />
-            <button class="btn-secondary" style="width:100%; margin-top:4px;" onclick="updateItemPrice()">Update Price</button>
-            <p class="mini-note">Changes here affect this page only (not your Google Sheet).</p>
-        </div>
+    <div class="filters">
+      <span class="chip active" data-filter="all" onclick="toggleFilter('all')">All</span>
+      <span class="chip" data-filter="roll" onclick="toggleFilter('roll')">Rolls</span>
+      <span class="chip" data-filter="nigiri" onclick="toggleFilter('nigiri')">Nigiri</span>
+      <span class="chip" data-filter="veg" onclick="toggleFilter('veg')">Veg</span>
+      <span class="chip" data-filter="spicy" onclick="toggleFilter('spicy')">Spicy</span>
+      <span class="chip" data-filter="raw" onclick="toggleFilter('raw')">Raw</span>
+      <span class="chip" data-filter="cooked" onclick="toggleFilter('cooked')">Cooked</span>
     </div>
 
-    <!-- RIGHT PANEL: CART -->
-    <div class="right-panel">
-        <h3>Your Cart</h3>
-        <div id="cartContainer"></div>
-
-        <div class="summary" id="summaryBox"></div>
-
-        <h4 style="margin-top:12px;">Settings</h4>
-        <label>Tax %</label>
-        <input type="number" id="taxInput" value="8" step="0.1" oninput="renderCart()" />
-        <label>Store cut %</label>
-        <input type="number" id="storeCutInput" value="25" step="0.5" oninput="renderCart()" />
-        <label>Owner cut %</label>
-        <input type="number" id="ownerCutInput" value="32" step="0.5" oninput="renderCart()" />
-
-        <button class="btn-secondary" style="margin-top:10px; width:100%;" onclick="clearCart()">Clear Cart</button>
+    <div class="preset-row">
+      <button class="preset-btn" onclick="buildPlatter('veg')">Veggie Platter</button>
+      <button class="preset-btn" onclick="buildPlatter('mixed')">Mixed Platter</button>
+      <button class="preset-btn" onclick="buildPlatter('nigiri')">Nigiri Platter</button>
     </div>
+    <div class="hint">Platters auto-add items to cart — adjust quantities there.</div>
+
+    <h3 style="margin-top:10px;">Sushi from Google Sheet</h3>
+    <div id="menuGrid" class="menu-grid"></div>
+
+    <div class="edit-box">
+      <h4>Quick Price Edit (local only)</h4>
+      <select id="editItemSelect"></select>
+      <input type="number" id="editPriceInput" placeholder="New price" step="0.1" />
+      <button class="btn btn-secondary" style="width:100%; margin-top:4px;" onclick="updateItemPrice()">
+        Update Price
+      </button>
+      <div class="hint">This changes prices only on this site, not in Google Sheets.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: CART -->
+  <div class="panel right-panel">
+    <h2>Cart</h2>
+    <div id="cartContainer"></div>
+
+    <div class="summary" id="summaryBox"></div>
+
+    <h3 style="margin-top:12px;">Settings</h3>
+    <label>Tax %</label>
+    <input type="number" id="taxInput" value="8" step="0.1" oninput="renderCart()" />
+    <label>Store cut %</label>
+    <input type="number" id="storeCutInput" value="25" step="0.5" oninput="renderCart()" />
+    <label>Owner cut %</label>
+    <input type="number" id="ownerCutInput" value="32" step="0.5" oninput="renderCart()" />
+
+    <button class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="clearCart()">
+      Clear Cart
+    </button>
+  </div>
 </div>
 
 <script>
-// ====== CONFIG ======
-const SHEET_URL = "https://opensheet.elk.sh/1zf6BTACk1tLWS9diRqQ3m93aQawfHftiELjByrWjBgE/Sheet1
-";
+  // ---- CONFIG ----
+  const SHEET_URL =
+    "https://opensheet.elk.sh/1zf6BTACk1tLWS9diRqQ3m93aQawfHftiELjByrWjBgE/Sheet1";
 
-// menuItems: [{plating,name,price,filling,sauces,tags:{...}}]
-let menuItems = [];
-let cart = {}; // name -> { item, qty }
+  let menuItems = []; // { image,name,price,filling,sauces,toppings,tags }
+  let cart = {};      // name -> { item, qty }
 
-// active filters
-let filters = { all: true, roll: false, nigiri: false, veg: false, spicy: false, raw: false, cooked: false };
+  // filters
+  let filters = {
+    all: true,
+    roll: false,
+    nigiri: false,
+    veg: false,
+    spicy: false,
+    raw: false,
+    cooked: false
+  };
 
-// ====== LOAD DATA FROM GOOGLE SHEET ======
-fetch(SHEET_URL)
-  .then(r => r.json())
-  .then(rows => {
-      menuItems = rows.map(r => {
-          const plating = (r["Sushi Plating"] || "").trim();
-          const name = (r["Name"] || "").trim();
-          const price = parseFloat(r["Price"] || "0") || 0;
-          const filling = r["Filling"] || "";
-          const sauces = r["Sauces + Toppings"] || "";
-          const tags = deriveTags(plating, filling, sauces);
-          return { plating, name, price, filling, sauces, tags };
-      }).filter(i => i.name);
+  // ---- LOAD SHEET ----
+  fetch(SHEET_URL)
+    .then(res => res.json())
+    .then(data => {
+      menuItems = data
+        .map(row => {
+          const image = (row["Sushi Plating"] || "").trim(); // image URL
+          const name = (row["Name"] || "").trim();
+          const price = parseFloat(row["Price"] || "0") || 0;
+          const filling = row["Filling"] || "";
+          const sauces = row["Sauces"] || "";
+          const toppings = row["Toppings"] || "";
+
+          const saucesToppings = [sauces, toppings]
+            .filter(v => v && v.trim() !== "")
+            .join(", ");
+
+          if (!name) return null;
+
+          const tags = deriveTags(name, filling, saucesToppings);
+
+          return {
+            image,
+            name,
+            price,
+            filling,
+            saucesToppings,
+            tags
+          };
+        })
+        .filter(Boolean);
 
       initEditSelect();
       renderMenu();
-  })
-  .catch(err => {
+    })
+    .catch(err => {
       console.error("Error loading sheet:", err);
-      document.getElementById("menuGrid").innerHTML = "<p>Could not load menu from sheet.</p>";
-  });
+      document.getElementById("menuGrid").innerHTML =
+        "<p>Could not load menu. Check that the sheet is published and headers are correct.</p>";
+    });
 
-// ====== TAGGING LOGIC ======
-function deriveTags(plating, filling, sauces) {
-    const txt = (filling + " " + sauces).toLowerCase();
-    const tags = { roll: false, nigiri: false, veg: false, spicy: false, raw: false, cooked: false };
+  // ---- TAGGING (Roll/Nigiri/Veg/Spicy/Raw/Cooked) ----
+  function deriveTags(name, filling, saucesToppings) {
+    const text = (name + " " + filling + " " + saucesToppings).toLowerCase();
+    const tags = {
+      roll: false,
+      nigiri: false,
+      veg: false,
+      spicy: false,
+      raw: false,
+      cooked: false
+    };
 
-    if (plating.toLowerCase().includes("roll")) tags.roll = true;
-    if (plating.toLowerCase().includes("nigiri")) tags.nigiri = true;
+    if (text.includes("roll")) tags.roll = true;
+    if (text.includes("nigiri")) tags.nigiri = true;
 
-    const vegWords = ["cucumber","avocado","veggie","vegetable","tofu","carrot","lettuce","asparagus"];
-    const nonVegWords = ["salmon","tuna","eel","shrimp","crab","chicken","beef","fish","yellowtail"];
+    const vegWords = ["cucumber", "avocado", "veg", "veggie", "vegetable", "tofu", "carrot", "lettuce", "asparagus"];
+    const nonVegWords = ["salmon", "tuna", "eel", "shrimp", "crab", "chicken", "beef", "fish", "yellowtail"];
 
-    const spicyWords = ["spicy","chili","jalapeno","sriracha","hot"];
-    const rawWords = ["raw","sashimi"]; // plus fish names if not tempura
-    const cookedWords = ["tempura","fried","baked","grilled"];
+    const spicyWords = ["spicy", "chili", "chilli", "jalapeno", "sriracha", "hot"];
+    const rawWords = ["sashimi", "raw"];
+    const cookedWords = ["tempura", "fried", "baked", "grilled", "seared"];
 
-    if (vegWords.some(w => txt.includes(w)) && !nonVegWords.some(w => txt.includes(w))) {
-        tags.veg = true;
+    if (vegWords.some(w => text.includes(w)) && !nonVegWords.some(w => text.includes(w))) {
+      tags.veg = true;
     }
 
-    if (spicyWords.some(w => txt.includes(w))) tags.spicy = true;
+    if (spicyWords.some(w => text.includes(w))) tags.spicy = true;
 
-    if (rawWords.some(w => txt.includes(w))) tags.raw = true;
-    if (nonVegWords.some(w => txt.includes(w)) && !cookedWords.some(w => txt.includes(w))) {
-        tags.raw = true;
+    if (rawWords.some(w => text.includes(w))) tags.raw = true;
+    if (nonVegWords.some(w => text.includes(w)) && !cookedWords.some(w => text.includes(w))) {
+      tags.raw = true;
     }
 
-    if (cookedWords.some(w => txt.includes(w))) tags.cooked = true;
-    if (txt.includes("eel") || txt.includes("shrimp")) tags.cooked = true; // typical
+    if (cookedWords.some(w => text.includes(w))) tags.cooked = true;
+    if (text.includes("eel") || text.includes("shrimp")) tags.cooked = true;
 
     return tags;
-}
+  }
 
-// ====== FILTERS & SEARCH ======
-function toggleFilter(key) {
+  // ---- FILTERS & SEARCH ----
+  function toggleFilter(key) {
     if (key === "all") {
-        filters = { all: true, roll: false, nigiri: false, veg: false, spicy: false, raw: false, cooked: false };
+      filters = {
+        all: true,
+        roll: false,
+        nigiri: false,
+        veg: false,
+        spicy: false,
+        raw: false,
+        cooked: false
+      };
     } else {
-        filters.all = false;
-        filters[key] = !filters[key];
-        // if none selected, fallback to "all"
-        if (!Object.keys(filters).some(k => k !== "all" && filters[k])) {
-            filters.all = true;
-        }
+      filters.all = false;
+      filters[key] = !filters[key];
+      if (!Object.keys(filters).some(k => k !== "all" && filters[k])) {
+        filters.all = true;
+      }
     }
     updateFilterChips();
     renderMenu();
-}
+  }
 
-function updateFilterChips() {
-    document.querySelectorAll(".chip").forEach(ch => {
-        const f = ch.getAttribute("data-filter");
-        ch.classList.toggle("active", !!filters[f]);
+  function updateFilterChips() {
+    document.querySelectorAll(".chip").forEach(chip => {
+      const f = chip.getAttribute("data-filter");
+      chip.classList.toggle("active", !!filters[f]);
     });
-}
+  }
 
-function passesFilters(item) {
+  function passesFilters(item) {
     if (filters.all) return true;
 
-    // plating filters
     if (filters.roll && !item.tags.roll) return false;
     if (filters.nigiri && !item.tags.nigiri) return false;
-
-    // property filters (if any selected)
     if (filters.veg && !item.tags.veg) return false;
     if (filters.spicy && !item.tags.spicy) return false;
     if (filters.raw && !item.tags.raw) return false;
     if (filters.cooked && !item.tags.cooked) return false;
 
     return true;
-}
+  }
 
-// ====== RENDER MENU ======
-function renderMenu() {
+  // ---- RENDER MENU ----
+  function renderMenu() {
     const grid = document.getElementById("menuGrid");
     const search = (document.getElementById("searchInput").value || "").toLowerCase();
-
     grid.innerHTML = "";
 
     menuItems
       .filter(it => passesFilters(it))
       .filter(it => {
-          if (!search) return true;
-          const s = (it.name + " " + it.filling + " " + it.sauces).toLowerCase();
-          return s.includes(search);
+        if (!search) return true;
+        const s = (it.name + " " + it.filling + " " + it.saucesToppings).toLowerCase();
+        return s.includes(search);
       })
       .forEach(it => {
-          const icons = [
-              it.tags.veg ? "🥗" : "",
-              it.tags.spicy ? "🌶️" : "",
-              it.tags.raw ? "🐟" : "",
-              it.tags.cooked ? "🍤" : ""
-          ].filter(Boolean).join(" ");
+        const icons = [
+          it.tags.veg ? "🥗" : "",
+          it.tags.spicy ? "🌶️" : "",
+          it.tags.raw ? "🐟" : "",
+          it.tags.cooked ? "🍤" : ""
+        ]
+          .filter(Boolean)
+          .join(" ");
 
-          const platingLabel = it.plating || "";
-          const filling = it.filling || "—";
-          const sauces = it.sauces || "—";
+        const saucesLine = it.saucesToppings || "—";
+        const filling = it.filling || "—";
 
-          grid.innerHTML += `
-            <div class="card">
-                <div>
-                    <div class="card-title">${it.name} — $${it.price.toFixed(2)}</div>
-                    <div class="meta">${platingLabel} ${icons ? "• " + icons : ""}</div>
-                    <div class="meta"><b>Filling:</b> ${filling}</div>
-                    <div class="meta"><b>Sauces + Toppings:</b> ${sauces}</div>
-                </div>
-                <div>
-                    <div class="qty-row">
-                        <input type="number" min="1" value="1" id="qty-${slug(it.name)}" />
-                        <button class="btn" style="padding:6px 10px;" onclick="addToCartFromMenu('${encodeURIComponent(it.name)}')">Add</button>
-                    </div>
-                </div>
+        const imgSrc = it.image || "https://via.placeholder.com/400x280?text=Sushi";
+
+        grid.innerHTML += `
+          <div class="card">
+            <img src="${imgSrc}" alt="${it.name}" onerror="this.src='https://via.placeholder.com/400x280?text=Sushi';" />
+            <div class="card-title">${it.name} — $${it.price.toFixed(2)}</div>
+            <div class="tags">${icons}</div>
+            <div class="meta"><b>Filling:</b> ${filling}</div>
+            <div class="meta"><b>Sauces + Toppings:</b> ${saucesLine}</div>
+            <div class="qty-row">
+              <input type="number" min="1" value="1" id="qty-${slug(it.name)}" />
+              <button class="btn" style="padding:6px 10px;" onclick="addToCartFromMenu('${encodeURIComponent(it.name)}')">
+                Add
+              </button>
             </div>
-          `;
+          </div>
+        `;
       });
 
     if (!grid.innerHTML) {
-        grid.innerHTML = "<p>No items match your search/filters.</p>";
+      grid.innerHTML = "<p>No items match the current search/filters.</p>";
     }
-}
+  }
 
-function slug(name) {
+  function slug(name) {
     return name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_]/g, "");
-}
+  }
 
-// ====== CART ======
-function addToCartFromMenu(encodedName) {
+  // ---- CART ----
+  function addToCartFromMenu(encodedName) {
     const name = decodeURIComponent(encodedName);
     const item = menuItems.find(i => i.name === name);
     if (!item) return;
@@ -561,34 +602,32 @@ function addToCartFromMenu(encodedName) {
     if (isNaN(qty) || qty < 1) qty = 1;
 
     if (!cart[name]) {
-        cart[name] = { item, qty };
+      cart[name] = { item, qty };
     } else {
-        cart[name].qty += qty;
+      cart[name].qty += qty;
     }
     renderCart();
-}
+  }
 
-function changeQty(name, delta) {
+  function changeQty(name, delta) {
     if (!cart[name]) return;
     cart[name].qty += delta;
     if (cart[name].qty <= 0) delete cart[name];
     renderCart();
-}
+  }
 
-function removeFromCart(name) {
+  function removeFromCart(name) {
     delete cart[name];
     renderCart();
-}
+  }
 
-function getPieces(item) {
-    // default: Rolls = 10 pcs, Nigiri = 1 pc
-    const p = item.plating.toLowerCase();
-    if (p.includes("roll")) return 10;
-    if (p.includes("nigiri")) return 1;
-    return 1;
-}
+  function guessPieces(item) {
+    const n = item.name.toLowerCase();
+    if (n.includes("nigiri")) return 1;
+    return 10; // default rolls = 10 pcs
+  }
 
-function renderCart() {
+  function renderCart() {
     const cartDiv = document.getElementById("cartContainer");
     const summaryDiv = document.getElementById("summaryBox");
 
@@ -598,34 +637,34 @@ function renderCart() {
     let totalPieces = 0;
 
     Object.keys(cart).forEach(name => {
-        const { item, qty } = cart[name];
-        const lineTotal = item.price * qty;
-        const pieces = getPieces(item) * qty;
+      const { item, qty } = cart[name];
+      const lineTotal = item.price * qty;
+      const pieces = guessPieces(item) * qty;
 
-        subtotal += lineTotal;
-        totalPieces += pieces;
+      subtotal += lineTotal;
+      totalPieces += pieces;
 
-        cartDiv.innerHTML += `
-          <div class="cart-item">
-              <div class="cart-row-top">
-                  <span><b>${name}</b></span>
-                  <span>$${lineTotal.toFixed(2)}</span>
-              </div>
-              <div class="cart-row-bottom">
-                  <span>
-                      <button class="qty-btn" onclick="changeQty('${name.replace(/'/g,"\\'")}', -1)">-</button>
-                      ${qty}
-                      <button class="qty-btn" onclick="changeQty('${name.replace(/'/g,"\\'")}', 1)">+</button>
-                      <button class="remove-btn" onclick="removeFromCart('${name.replace(/'/g,"\\'")}')">x</button>
-                  </span>
-                  <span>${pieces} pcs</span>
-              </div>
+      cartDiv.innerHTML += `
+        <div class="cart-item">
+          <div class="cart-row-top">
+            <span><b>${name}</b></span>
+            <span>$${lineTotal.toFixed(2)}</span>
           </div>
-        `;
+          <div class="cart-row-bottom">
+            <span>
+              <button class="qty-btn" onclick="changeQty('${name.replace(/'/g,"\\'")}', -1)">-</button>
+              ${qty}
+              <button class="qty-btn" onclick="changeQty('${name.replace(/'/g,"\\'")}', 1)">+</button>
+              <button class="remove-btn" onclick="removeFromCart('${name.replace(/'/g,"\\'")}')">x</button>
+            </span>
+            <span>${pieces} pcs</span>
+          </div>
+        </div>
+      `;
     });
 
     if (!Object.keys(cart).length) {
-        cartDiv.innerHTML = "<p class='mini-note'>Cart is empty. Add items from the menu.</p>";
+      cartDiv.innerHTML = "<p class='hint'>Cart is empty. Add items from the menu.</p>";
     }
 
     const taxRate = parseFloat(document.getElementById("taxInput").value || "0") / 100;
@@ -639,92 +678,92 @@ function renderCart() {
     const yourProfit = total - storeShare - ownerShare;
 
     summaryDiv.innerHTML = `
-        <div><b>Subtotal:</b> $${subtotal.toFixed(2)}</div>
-        <div><b>Tax:</b> $${tax.toFixed(2)}</div>
-        <div><b>Total:</b> $${total.toFixed(2)}</div><br>
-        <div><b>Store (${(storeRate*100).toFixed(1)}%):</b> $${storeShare.toFixed(2)}</div>
-        <div><b>Owner (${(ownerRate*100).toFixed(1)}%):</b> $${ownerShare.toFixed(2)}</div><br>
-        <div><b>Your Profit:</b> $${yourProfit.toFixed(2)}</div>
-        <div><b>Total Pieces:</b> ${totalPieces}</div>
+      <div class="summary-row"><b>Subtotal:</b> <span>$${subtotal.toFixed(2)}</span></div>
+      <div class="summary-row"><b>Tax:</b> <span>$${tax.toFixed(2)}</span></div>
+      <div class="summary-row"><b>Total:</b> <span>$${total.toFixed(2)}</span></div>
+      <br>
+      <div class="summary-row"><b>Store (${(storeRate*100).toFixed(1)}%):</b> <span>$${storeShare.toFixed(2)}</span></div>
+      <div class="summary-row"><b>Owner (${(ownerRate*100).toFixed(1)}%):</b> <span>$${ownerShare.toFixed(2)}</span></div>
+      <br>
+      <div class="summary-row"><b>Your Profit:</b> <span>$${yourProfit.toFixed(2)}</span></div>
+      <div class="summary-row"><b>Total Pieces:</b> <span>${totalPieces}</span></div>
     `;
-}
+  }
 
-function clearCart() {
+  function clearCart() {
     cart = {};
     renderCart();
-}
+  }
 
-// ====== PRESET PLATTERS ======
-function buildPlatter(type) {
+  // ---- PRESET PLATTERS ----
+  function buildPlatter(type) {
     if (!menuItems.length) return;
 
-    // Basic filtered groups
-    const rolls = menuItems.filter(i => i.tags.roll);
-    const nigiri = menuItems.filter(i => i.tags.nigiri);
+    const rolls = menuItems.filter(i => i.name.toLowerCase().includes("roll"));
+    const nigiri = menuItems.filter(i => i.name.toLowerCase().includes("nigiri"));
     const vegRolls = rolls.filter(i => i.tags.veg);
-    const spicyRolls = rolls.filter(i => i.tags.spicy);
 
-    // Simple strategies
     if (type === "veg") {
-        vegRolls.slice(0,4).forEach(it => {
-            if (!cart[it.name]) cart[it.name] = { item: it, qty: 0 };
-            cart[it.name].qty += 2; // 2 rolls each
-        });
+      vegRolls.slice(0, 4).forEach(it => {
+        const name = it.name;
+        if (!cart[name]) cart[name] = { item: it, qty: 0 };
+        cart[name].qty += 2;
+      });
     } else if (type === "mixed") {
-        rolls.slice(0,3).forEach(it => {
-            if (!cart[it.name]) cart[it.name] = { item: it, qty: 0 };
-            cart[it.name].qty += 2;
-        });
-        nigiri.slice(0,6).forEach(it => {
-            if (!cart[it.name]) cart[it.name] = { item: it, qty: 0 };
-            cart[it.name].qty += 4;
-        });
+      rolls.slice(0, 3).forEach(it => {
+        const name = it.name;
+        if (!cart[name]) cart[name] = { item: it, qty: 0 };
+        cart[name].qty += 2;
+      });
+      nigiri.slice(0, 5).forEach(it => {
+        const name = it.name;
+        if (!cart[name]) cart[name] = { item: it, qty: 0 };
+        cart[name].qty += 4;
+      });
     } else if (type === "nigiri") {
-        nigiri.slice(0,8).forEach(it => {
-            if (!cart[it.name]) cart[it.name] = { item: it, qty: 0 };
-            cart[it.name].qty += 5;
-        });
+      nigiri.slice(0, 8).forEach(it => {
+        const name = it.name;
+        if (!cart[name]) cart[name] = { item: it, qty: 0 };
+        cart[name].qty += 5;
+      });
     }
 
     renderCart();
-}
+  }
 
-// ====== PRICE EDIT SELECT ======
-function initEditSelect() {
+  // ---- PRICE EDIT ----
+  function initEditSelect() {
     const sel = document.getElementById("editItemSelect");
     sel.innerHTML = "";
     menuItems.forEach(it => {
-        const opt = document.createElement("option");
-        opt.value = it.name;
-        opt.textContent = `${it.name} ($${it.price.toFixed(2)})`;
-        sel.appendChild(opt);
+      const opt = document.createElement("option");
+      opt.value = it.name;
+      opt.textContent = `${it.name} ($${it.price.toFixed(2)})`;
+      sel.appendChild(opt);
     });
-}
+  }
 
-function updateItemPrice() {
+  function updateItemPrice() {
     const sel = document.getElementById("editItemSelect");
     const name = sel.value;
     const newPrice = parseFloat(document.getElementById("editPriceInput").value || "NaN");
     if (isNaN(newPrice) || newPrice < 0) {
-        alert("Enter a valid price.");
-        return;
+      alert("Enter a valid price.");
+      return;
     }
     const item = menuItems.find(i => i.name === name);
     if (!item) return;
     item.price = newPrice;
-
-    // also update any cart entries
     if (cart[name]) cart[name].item.price = newPrice;
-
     initEditSelect();
     renderMenu();
     renderCart();
-}
+  }
 
-// ====== DARK MODE ======
-function toggleDarkMode() {
+  // ---- DARK MODE ----
+  function toggleDarkMode() {
     document.body.classList.toggle("dark");
-}
+  }
 </script>
 
 </body>

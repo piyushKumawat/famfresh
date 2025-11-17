@@ -28,10 +28,9 @@
   }
 
   * { box-sizing: border-box; }
-
   body {
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
   }
@@ -39,42 +38,18 @@
   header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
+    padding: 10px;
     background: #000;
     color: #fff;
   }
 
-  header h1 {
-    font-size: 18px;
-    margin: 0;
-  }
-
-  .header-right {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
   .btn {
-    border: none;
-    border-radius: 999px;
-    padding: 7px 14px;
-    font-size: 13px;
-    cursor: pointer;
     background: var(--accent);
+    border: none;
+    padding: 7px 14px;
     color: #fff;
-    white-space: nowrap;
-  }
-
-  .btn-secondary {
-    background: #444;
-  }
-
-  .btn-outline {
-    background: transparent;
-    border: 1px solid #666;
-    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
   }
 
   .main {
@@ -82,82 +57,20 @@
     gap: 12px;
     padding: 10px;
   }
-
-  @media (max-width: 900px) {
-    .main {
-      flex-direction: column;
-    }
-  }
+  @media(max-width:900px){ .main{flex-direction:column;} }
 
   .panel {
     background: var(--card-bg);
-    border-radius: 12px;
     padding: 12px;
-    box-shadow: var(--shadow);
-  }
-
-  .left-panel {
-    flex: 1.7;
-    min-width: 0;
-  }
-
-  .right-panel {
+    border-radius: 12px;
     flex: 1;
-    max-width: 380px;
-  }
-
-  h2, h3, h4 {
-    margin-top: 0;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 7px 9px;
-    margin: 4px 0 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    background: transparent;
-    color: var(--text);
-  }
-
-  body.dark input,
-  body.dark select {
-    border-color: #555;
-  }
-
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .chip {
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid #ccc;
-    font-size: 12px;
-    cursor: pointer;
-    background: #f4f4f4;
-    color: #333;
-  }
-  body.dark .chip {
-    background: #333;
-    color: #eee;
-    border-color: #555;
-  }
-  .chip.active {
-    background: var(--accent-alt);
-    color: #fff;
-    border-color: var(--accent-alt);
+    box-shadow: var(--shadow);
   }
 
   .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(210px,1fr));
+    gap: 12px;
   }
 
   .card {
@@ -165,374 +78,285 @@
     border-radius: 12px;
     padding: 10px;
     box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .card img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
-  .card-title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 8px;
-  }
-
-  .meta {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 3px;
-  }
-
-  .qty-row {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    margin-top: 6px;
-  }
-
-  .qty-row input {
-    width: 60px;
-    text-align: center;
-  }
-
-  .edit-box {
-    margin-top: 14px;
-    padding: 8px;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.03);
-    font-size: 12px;
-  }
-  body.dark .edit-box {
-    background: rgba(255,255,255,0.05);
-  }
-
-  .edit-box h4 {
-    margin: 0 0 6px 0;
-    font-size: 13px;
-  }
-
-  .cart-item {
-    padding: 8px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  body.dark .cart-item {
-    border-color: #444;
-  }
-
-  .cart-row-top {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-  }
-
-  .cart-row-bottom {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-    align-items: center;
   }
 
   .qty-btn {
     background: var(--accent-alt);
     border: none;
-    border-radius: 4px;
-    width: 26px;
-    height: 26px;
     color: #fff;
-    font-size: 16px;
+    height: 24px;
+    width: 24px;
+    border-radius: 4px;
     cursor: pointer;
   }
 
-  .remove-btn {
+  .remove-btn{
     background: var(--danger);
-    border: none;
-    border-radius: 4px;
-    padding: 3px 7px;
-    font-size: 11px;
-    color: #fff;
-    cursor: pointer;
-    margin-left: 6px;
+    color:#fff;
+    border:none;
+    padding:3px 6px;
+    border-radius:4px;
+    cursor:pointer;
   }
 
-  .summary {
-    font-size: 13px;
-    margin-top: 10px;
-    border-top: 1px solid #ddd;
-    padding-top: 8px;
-  }
-  body.dark .summary {
-    border-color: #444;
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 7px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: transparent;
+    color: var(--text);
   }
 
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2px;
+  .chip {
+    border:1px solid #aaa;
+    padding:4px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:12px;
   }
+  .chip.active{
+    background:var(--accent-alt);
+    color:#fff;
+    border-color:var(--accent-alt);
+  }
+
 </style>
 </head>
 <body>
+
+<header>
+  <h1>Sushi Menu Builder</h1>
+  <button class="btn" onclick="toggleDarkMode()">Dark Mode</button>
+</header>
+
+<div class="main">
+
+  <!-- LEFT PANEL -->
+  <div class="panel left-panel">
+    <h2>Menu</h2>
+
+    <input type="text" id="searchInput" placeholder="Search..." oninput="renderMenu()">
+
+    <div class="filters" style="margin:8px 0;">
+      <span class="chip" data-filter="all" onclick="toggleFilter('all')">All</span>
+      <span class="chip" data-filter="roll" onclick="toggleFilter('roll')">Rolls</span>
+      <span class="chip" data-filter="nigiri" onclick="toggleFilter('nigiri')">Nigiri</span>
+      <span class="chip" data-filter="veg" onclick="toggleFilter('veg')">Veg</span>
+      <span class="chip" data-filter="spicy" onclick="toggleFilter('spicy')">Spicy</span>
+      <span class="chip" data-filter="raw" onclick="toggleFilter('raw')">Raw</span>
+      <span class="chip" data-filter="cooked" onclick="toggleFilter('cooked')">Cooked</span>
+    </div>
+
+    <div id="menuGrid" class="menu-grid"></div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel right-panel">
+    <h2>Cart</h2>
+    <div id="cartContainer"></div>
+
+    <h3>Tax %</h3>
+    <input type="number" id="taxInput" value="8" onchange="renderCart()">
+
+    <h3>Summary</h3>
+    <div id="summaryBox"></div>
+
+    <button class="btn" style="margin-top:10px;" onclick="clearCart()">Clear Cart</button>
+  </div>
+
+</div>
+
 <script>
 const SHEET_URL =
   "https://opensheet.elk.sh/1zf6BTACk1tLWS9diRqQ3m93aQawfHftiELjByrWjBgE/Sheet1";
 
 let menuItems = [];
 let cart = {};
+let filters = { all:true, roll:false, nigiri:false, veg:false, spicy:false, raw:false, cooked:false };
 
-let filters = {
-  all: true,
-  roll: false,
-  nigiri: false,
-  veg: false,
-  spicy: false,
-  raw: false,
-  cooked: false
-};
-
-// ---------- LOAD SHEET ----------
 fetch(SHEET_URL)
-  .then(r => r.json())
-  .then(data => {
-    menuItems = data
-      .map(row => {
-        const image = (row["Sushi Plating"] || "").trim();
-        const name  = (row["Name"] || "").trim();
+  .then(r=>r.json())
+  .then(data=>{
+    menuItems = data.map(row=>{
+      const image = (row["Sushi Plating"]||"").trim();
+      const name  = (row["Name"]||"").trim();
 
-        // FIXED PRICE PARSER ($9.49 → 9.49)
-        const price = parseFloat(
-          (row["Price"] || "").toString().replace(/[$,]/g, "")
-        ) || 0;
+      const price = parseFloat((row["Price"]||"").toString().replace(/[$,]/g,"")) || 0;
 
-        const filling = row["Filling"] || "";
-        const sauces  = row["Sauces"] || "";
-        const toppings = row["Toppings"] || "";
-        const saucesToppings = [sauces, toppings].filter(v => v).join(", ");
+      const filling = row["Filling"]||"";
+      const sauces  = row["Sauces"]||"";
+      const toppings= row["Toppings"]||"";
 
-        if (!name) return null;
-        const tags = deriveTags(name, filling, saucesToppings);
+      const saucesToppings=[sauces,toppings].filter(v=>v).join(", ");
 
-        return { image, name, price, filling, saucesToppings, tags };
-      })
-      .filter(Boolean);
+      if(!name) return null;
+      const tags = deriveTags(name,filling,saucesToppings);
 
-    initEditSelect();
+      return {image,name,price,filling,saucesToppings,tags};
+    }).filter(Boolean);
+
+    updateFilterChips();
     renderMenu();
-  })
-  .catch(() => {
-    document.getElementById("menuGrid").innerHTML =
-      "<p>Error loading sheet. Check if published.</p>";
   });
 
-// ---------- TAGGING ----------
-function deriveTags(name, fill, s) {
-  const t = (name + " " + fill + " " + s).toLowerCase();
-  const tags = { roll:false, nigiri:false, veg:false, spicy:false, raw:false, cooked:false };
 
-  if (t.includes("roll")) tags.roll = true;
-  if (t.includes("nigiri")) tags.nigiri = true;
+function deriveTags(name,f,s){
+  const t=(name+" "+f+" "+s).toLowerCase();
+  const tags={roll:false,nigiri:false,veg:false,spicy:false,raw:false,cooked:false};
 
-  const veg = ["cucumber","avocado","veg","vegetable","tofu","lettuce","asparagus"];
-  const nonveg = ["salmon","tuna","eel","shrimp","crab","fish"];
+  if(t.includes("roll"))tags.roll=true;
+  if(t.includes("nigiri"))tags.nigiri=true;
 
-  if (veg.some(w => t.includes(w)) && !nonveg.some(w => t.includes(w))) tags.veg = true;
-  if (["spicy","jalapeno","chili"].some(w => t.includes(w))) tags.spicy = true;
-  if (["raw","sashimi"].some(w => t.includes(w))) tags.raw = true;
-  if (["tempura","fried","baked","grilled","eel","shrimp"].some(w => t.includes(w))) tags.cooked = true;
+  const veg=["cucumber","avocado","vegetable","asparagus"];
+  const nonveg=["salmon","eel","shrimp","tuna","crab"];
+
+  if(veg.some(w=>t.includes(w)) && !nonveg.some(w=>t.includes(w))) tags.veg=true;
+  if(t.includes("spicy")) tags.spicy=true;
+  if(t.includes("raw")) tags.raw=true;
+  if(["eel","shrimp","tempura"].some(w=>t.includes(w))) tags.cooked=true;
 
   return tags;
 }
 
-// ---------- FILTERS ----------
-function toggleFilter(key) {
-  if (key === "all") {
-    filters = { all:true, roll:false, nigiri:false, veg:false, spicy:false, raw:false, cooked:false };
-  } else {
-    filters.all = false;
-    filters[key] = !filters[key];
-    if (!Object.values(filters).some((v, i) => i !== 0 && v)) filters.all = true;
-  }
-  updateFilterChips();
-  renderMenu();
-}
-
-function updateFilterChips() {
-  document.querySelectorAll(".chip").forEach(chip => {
-    const f = chip.getAttribute("data-filter");
-    chip.classList.toggle("active", filters[f]);
-  });
-}
-
-function passesFilters(it) {
-  if (filters.all) return true;
-  for (let f in filters) {
-    if (filters[f] && !it.tags[f]) return false;
+function passesFilters(it){
+  if(filters.all) return true;
+  for(let f in filters){
+    if(f!=="all" && filters[f] && !it.tags[f]) return false;
   }
   return true;
 }
 
-// ---------- MENU ----------
-function renderMenu() {
-  const grid = document.getElementById("menuGrid");
-  const search = (document.getElementById("searchInput").value || "").toLowerCase();
-
-  grid.innerHTML = "";
+function renderMenu(){
+  const grid=document.getElementById("menuGrid");
+  const q=(document.getElementById("searchInput").value||"").toLowerCase();
+  grid.innerHTML="";
 
   menuItems
-    .filter(it => passesFilters(it))
-    .filter(it => {
-      const s = (it.name + it.filling + it.saucesToppings).toLowerCase();
-      return s.includes(search);
+    .filter(it=>passesFilters(it))
+    .filter(it=>{
+      const s=(it.name+it.filling+it.saucesToppings).toLowerCase();
+      return s.includes(q);
     })
-    .forEach(it => {
-      const icons = [
-        it.tags.veg ? "🥗" : "",
-        it.tags.spicy ? "🌶️" : "",
-        it.tags.raw ? "🐟" : "",
-        it.tags.cooked ? "🍤" : ""
-      ].filter(Boolean).join(" ");
+    .forEach(it=>{
+      const icons=[
+        it.tags.veg?"🥗":"",
+        it.tags.spicy?"🌶️":"",
+        it.tags.raw?"🐟":"",
+        it.tags.cooked?"🍤":""
+      ].join(" ");
 
-      grid.innerHTML += `
+      grid.innerHTML+=`
         <div class="card">
-          <img src="${it.image}" onerror="this.src='https://via.placeholder.com/400x280?text=Sushi';">
-          <div class="card-title">${it.name} — $${it.price.toFixed(2)}</div>
+          <img src="${it.image}" onerror="this.src='https://via.placeholder.com/400x300?text=Sushi';" style="width:100%;height:150px;object-fit:cover;border-radius:10px;">
+          <div style="font-weight:600;margin-top:6px;">${it.name} — $${it.price.toFixed(2)}</div>
           <div class="meta">${icons}</div>
-          <div class="meta"><b>Filling:</b> ${it.filling || "-"}</div>
-          <div class="meta"><b>Sauces + Toppings:</b> ${it.saucesToppings || "-"}</div>
-          <div class="qty-row">
-            <input type="number" id="qty-${slug(it.name)}" value="1" min="1">
-            <button class="btn" onclick="addToCartFromMenu('${encodeURIComponent(it.name)}')">Add</button>
+          <div class="meta"><b>Filling:</b> ${it.filling}</div>
+          <div class="meta"><b>Sauces + Toppings:</b> ${it.saucesToppings}</div>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <input type="number" id="qty-${slug(it.name)}" value="1" min="1" style="width:60px;">
+            <button class="btn" onclick="addToCart('${it.name}')">Add</button>
           </div>
         </div>
       `;
     });
 }
 
-function slug(name) {
-  return name.replace(/\s+/g, "_");
+function slug(n){ return n.replace(/\s+/g,"_"); }
+
+function toggleFilter(f){
+  if(f==="all"){
+    filters={all:true,roll:false,nigiri:false,veg:false,spicy:false,raw:false,cooked:false};
+  } else {
+    filters.all=false;
+    filters[f]=!filters[f];
+    if(!Object.keys(filters).some(k=>k!=="all" && filters[k])) filters.all=true;
+  }
+  updateFilterChips();
+  renderMenu();
 }
 
-// ---------- CART ----------
-function addToCartFromMenu(encoded) {
-  const name = decodeURIComponent(encoded);
-  const item = menuItems.find(i => i.name === name);
-  if (!item) return;
+function updateFilterChips(){
+  document.querySelectorAll(".chip").forEach(ch=>{
+    const f=ch.getAttribute("data-filter");
+    ch.classList.toggle("active",filters[f]);
+  });
+}
 
-  const qty = parseInt(document.getElementById("qty-" + slug(name)).value || "1");
-
-  if (!cart[name]) cart[name] = { item, qty:0 };
-  cart[name].qty += qty;
-
+function addToCart(name){
+  const item=menuItems.find(i=>i.name===name);
+  const qty=parseInt(document.getElementById("qty-"+slug(name)).value||1);
+  if(!cart[name]) cart[name]={item,qty:0};
+  cart[name].qty+=qty;
   renderCart();
 }
 
-function changeQty(name, delta) {
-  cart[name].qty += delta;
-  if (cart[name].qty <= 0) delete cart[name];
+function changeQty(name,d){
+  cart[name].qty+=d;
+  if(cart[name].qty<=0) delete cart[name];
   renderCart();
 }
 
-function removeFromCart(name) {
+function removeFromCart(name){
   delete cart[name];
   renderCart();
 }
 
-function pieces(item) {
-  return item.name.toLowerCase().includes("nigiri") ? 1 : 10;
+function pieces(item){
+  return item.name.toLowerCase().includes("nigiri")?1:10;
 }
 
-function renderCart() {
-  const div = document.getElementById("cartContainer");
-  const sum = document.getElementById("summaryBox");
+function renderCart(){
+  const div=document.getElementById("cartContainer");
+  const sum=document.getElementById("summaryBox");
 
-  div.innerHTML = "";
-  let subtotal = 0;
-  let totalPieces = 0;
+  div.innerHTML="";
+  let subtotal=0,totalPieces=0;
 
-  Object.keys(cart).forEach(name => {
-    const { item, qty } = cart[name];
-    subtotal += item.price * qty;
-    totalPieces += pieces(item) * qty;
+  Object.keys(cart).forEach(name=>{
+    const {item,qty}=cart[name];
+    subtotal+=item.price*qty;
+    totalPieces+=pieces(item)*qty;
 
-    div.innerHTML += `
-      <div class="cart-item">
-        <div class="cart-row-top">
+    div.innerHTML+=`
+      <div style="border-bottom:1px solid #ccc;padding:8px 0;">
+        <div style="display:flex;justify-content:space-between;">
           <span><b>${name}</b></span>
-          <span>$${(item.price * qty).toFixed(2)}</span>
+          <span>$${(item.price*qty).toFixed(2)}</span>
         </div>
-        <div class="cart-row-bottom">
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);">
           <span>
-            <button class="qty-btn" onclick="changeQty('${name}', -1)">-</button>
+            <button class="qty-btn" onclick="changeQty('${name}',-1)">-</button>
             ${qty}
-            <button class="qty-btn" onclick="changeQty('${name}', 1)">+</button>
+            <button class="qty-btn" onclick="changeQty('${name}',1)">+</button>
             <button class="remove-btn" onclick="removeFromCart('${name}')">x</button>
           </span>
-          <span>${pieces(item) * qty} pcs</span>
+          <span>${pieces(item)*qty} pcs</span>
         </div>
       </div>
     `;
   });
 
-  if (!Object.keys(cart).length) {
-    div.innerHTML = "<p class='meta'>Cart is empty.</p>";
+  if(!Object.keys(cart).length){
+    div.innerHTML="<p class='meta'>Cart empty.</p>";
   }
 
-  const taxRate = parseFloat(document.getElementById("taxInput").value || 0) / 100;
-  const tax = subtotal * taxRate;
-  const total = subtotal + tax;
+  const taxRate=(parseFloat(document.getElementById("taxInput").value||0)/100);
+  const tax=subtotal*taxRate;
+  const total=subtotal+tax;
 
-  sum.innerHTML = `
-    <div class="summary-row"><b>Subtotal:</b> <span>$${subtotal.toFixed(2)}</span></div>
-    <div class="summary-row"><b>Tax:</b> <span>$${tax.toFixed(2)}</span></div>
-    <div class="summary-row"><b>Total:</b> <span>$${total.toFixed(2)}</span></div>
+  sum.innerHTML=`
+    <div><b>Subtotal:</b> $${subtotal.toFixed(2)}</div>
+    <div><b>Tax:</b> $${tax.toFixed(2)}</div>
+    <div><b>Total:</b> $${total.toFixed(2)}</div>
     <br>
-    <div class="summary-row"><b>Total Pieces:</b> <span>${totalPieces}</span></div>
+    <div><b>Total Pieces:</b> ${totalPieces}</div>
   `;
 }
 
-function clearCart() {
-  cart = {};
-  renderCart();
-}
+function clearCart(){ cart={}; renderCart(); }
+function toggleDarkMode(){ document.body.classList.toggle("dark"); }
 
-// ---------- PRICE EDIT ----------
-function initEditSelect() {
-  const s = document.getElementById("editItemSelect");
-  s.innerHTML = "";
-  menuItems.forEach(it => {
-    const opt = document.createElement("option");
-    opt.value = it.name;
-    opt.textContent = `${it.name} ($${it.price.toFixed(2)})`;
-    s.appendChild(opt);
-  });
-}
-
-function updateItemPrice() {
-  const sel = document.getElementById("editItemSelect").value;
-  const newPrice = parseFloat(document.getElementById("editPriceInput").value || "NaN");
-  if (isNaN(newPrice)) {
-    alert("Invalid price");
-    return;
-  }
-  const item = menuItems.find(i => i.name === sel);
-  item.price = newPrice;
-  if (cart[sel]) cart[sel].item.price = newPrice;
-  initEditSelect();
-  renderMenu();
-  renderCart();
-}
-
-// ---------- DARK MODE ----------
-function toggleDarkMode() {
-  document.body.classList.toggle("dark");
-}
 </script>
 
 </body>
